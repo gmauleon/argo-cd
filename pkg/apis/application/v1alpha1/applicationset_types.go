@@ -83,7 +83,6 @@ type ApplicationPreservedFields struct {
 type ApplicationSetStrategy struct {
 	Type        string                         `json:"type,omitempty" protobuf:"bytes,1,opt,name=type"`
 	RollingSync *ApplicationSetRolloutStrategy `json:"rollingSync,omitempty" protobuf:"bytes,2,opt,name=rollingSync"`
-	// RollingUpdate *ApplicationSetRolloutStrategy `json:"rollingUpdate,omitempty" protobuf:"bytes,3,opt,name=rollingUpdate"`
 }
 type ApplicationSetRolloutStrategy struct {
 	Steps []ApplicationSetRolloutStep `json:"steps,omitempty" protobuf:"bytes,1,opt,name=steps"`
@@ -851,6 +850,21 @@ const (
 	ApplicationSetReasonSyncApplicationError             = "SyncApplicationError"
 )
 
+// ApplicationSetApplicationStatusCode is a type which represents possible application state in the applicationSet
+type ApplicationSetApplicationStatusCode string
+
+// Possible ApplicationSetApplicationStatus status
+const (
+	// ApplicationSetApplicationStatusCodeWaiting indicates the application is waiting in line to be synced
+	ApplicationSetApplicationStatusCodeWaiting ApplicationSetApplicationStatusCode = "Waiting"
+	// ApplicationSetApplicationStatusCodePending indicates the application is ready to be synced
+	ApplicationSetApplicationStatusCodePending ApplicationSetApplicationStatusCode = "Pending"
+	// ApplicationSetApplicationStatusCodeProgressing indicates the application is currently being synced
+	ApplicationSetApplicationStatusCodeProgressing ApplicationSetApplicationStatusCode = "Progressing"
+	// ApplicationSetApplicationStatusCodeHealthy indicates the application is healthy and synced
+	ApplicationSetApplicationStatusCodeHealthy ApplicationSetApplicationStatusCode = "Healthy"
+)
+
 // ApplicationSetApplicationStatus contains details about each Application managed by the ApplicationSet
 type ApplicationSetApplicationStatus struct {
 	// Application contains the name of the Application resource
@@ -860,11 +874,9 @@ type ApplicationSetApplicationStatus struct {
 	// Message contains human-readable message indicating details about the status
 	Message string `json:"message" protobuf:"bytes,3,opt,name=message"`
 	// Status contains the AppSet's perceived status of the managed Application resource: (Waiting, Pending, Progressing, Healthy)
-	Status string `json:"status" protobuf:"bytes,4,opt,name=status"`
+	Status ApplicationSetApplicationStatusCode `json:"status" protobuf:"bytes,4,opt,name=status"`
 	// Step tracks which step this Application should be updated in
 	Step string `json:"step" protobuf:"bytes,5,opt,name=step"`
-	// TargetRevision tracks the desired revisions the Application should be synced to.
-	TargetRevisions []string `json:"targetRevisions" protobuf:"bytes,6,opt,name=targetrevisions"`
 }
 
 // ApplicationSetList contains a list of ApplicationSet

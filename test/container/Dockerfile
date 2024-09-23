@@ -115,6 +115,9 @@ RUN userdel -r ubuntu && \
     ln -s /usr/local/lib/node_modules/npm/bin/npx-cli.js /usr/local/bin/npx && \
     ln -s /opt/yarn-v1.22.22/bin/yarn /usr/local/bin/yarn && \
     ln -s /opt/yarn-v1.22.22/bin/yarnpkg /usr/local/bin/yarnpkg && \
-    mkdir -p /var/lib/registry
+    mkdir -p /var/lib/registry && \
+    mkdir -p /go/src/github.com/argoproj/argo-cd && \
+    chown -R user:user /go/src
+
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
