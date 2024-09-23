@@ -397,11 +397,6 @@ func (in *ApplicationSetApplicationStatus) DeepCopyInto(out *ApplicationSetAppli
 		in, out := &in.LastTransitionTime, &out.LastTransitionTime
 		*out = (*in).DeepCopy()
 	}
-	if in.TargetRevisions != nil {
-		in, out := &in.TargetRevisions, &out.TargetRevisions
-		*out = make([]string, len(*in))
-		copy(*out, *in)
-	}
 	return
 }
 
